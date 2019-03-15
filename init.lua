@@ -1,62 +1,18 @@
---- === OzzyWM ===
----
---- Ozzy's Window Manager
-
+-- OzzyWM (Ozzy's Window Manager)
 local OzzyWM={}
 OzzyWM.__index = OzzyWM
 
 -- Metadata
 OzzyWM.name = "OzzyWM"
-OzzyWM.version = "1.0"
+OzzyWM.version = "1.1"
 OzzyWM.author = "Özgün Çağrı AYDIN"
-OzzyWM.homepage = "https://github.com/ozguncagri/OzzyWM"
+OzzyWM.homepage = "https://ozguncagri.com"
 OzzyWM.license = "MIT - https://opensource.org/licenses/MIT"
 
--- Window move and resize factor definitions ------
+-- Window move and resize factor definitions
 OzzyWM.windowMoveFactor = 10
 OzzyWM.windowShrinkFactor = 20
 OzzyWM.windowExpandFactor = 20
-
--- Shortcut button definitions ------
-OzzyWM.mod3Buttons = {"cmd", "alt", "ctrl"}
-OzzyWM.mod4Buttons = {"shift", "cmd", "alt", "ctrl"}
-
--- Get current window elements ------
-OzzyWM.currentWindowAndScreenElements = function()
-	local win = hs.window.focusedWindow()
-	local f = win:frame()
-	local screen = win:screen()
-	local max = screen:frame()
-	local oneCol = max.w / 8
-
-	return win, f, screen, max, oneCol
-end
-
--- Move window to left and set width (columnSize) to eight of screen width ------
-OzzyWM.leftColumn = function(columnSize)
-	return function()
-		local win, f, screen, max, oneCol = OzzyWM.currentWindowAndScreenElements()
-
-		f.x = 0
-		f.y = 0
-		f.w = oneCol * columnSize
-		f.h = max.h
-		win:setFrame(f)
-	end
-end
-
--- Move window to right and set width (columnSize) to eight of screen width ------
-OzzyWM.rightColumn = function(columnSize)
-	return function()
-		local win, f, screen, max, oneCol = OzzyWM.currentWindowAndScreenElements()
-
-		f.x = max.w - (oneCol * columnSize)
-		f.y = 0
-		f.w = oneCol * columnSize
-		f.h = max.h
-		win:setFrame(f)
-	end
-end
 
 -- 3 modification binder wrapper
 OzzyWM.mod3Binder = function(key, operation)
@@ -68,8 +24,45 @@ OzzyWM.mod4Binder = function(key, operation)
 	hs.hotkey.bind({"shift", "cmd", "alt", "ctrl"}, key, operation)
 end
 
+-- Get current window elements
+OzzyWM.currentWindowAndScreenElements = function()
+	local win = hs.window.focusedWindow()
+	local f = win:frame()
+	local screen = win:screen()
+	local max = screen:fullFrame()
+	local oneCol = max.w / 8
+
+	return win, f, screen, max, oneCol
+end
+
+-- Move window to left and set width (columnSize) to eight of screen width
+OzzyWM.leftColumn = function(columnSize)
+	return function()
+		local win, f, screen, max, oneCol = OzzyWM.currentWindowAndScreenElements()
+
+		f.x = max.x
+		f.y = 0
+		f.w = oneCol * columnSize
+		f.h = max.h
+		win:setFrame(f)
+	end
+end
+
+-- Move window to right and set width (columnSize) to eight of screen width
+OzzyWM.rightColumn = function(columnSize)
+	return function()
+		local win, f, screen, max, oneCol = OzzyWM.currentWindowAndScreenElements()
+
+		f.x = max.x + (max.w - (oneCol * columnSize))
+		f.y = 0
+		f.w = oneCol * columnSize
+		f.h = max.h
+		win:setFrame(f)
+	end
+end
+
 OzzyWM.alternateAppSwitcher = function()
-	-- Alternate application switcher settings ------
+	-- Alternate application switcher settings
 	switcher = hs.window.switcher.new()
 	switcher.ui.onlyActiveApplication = false
 	switcher.ui.showTitles = false
@@ -79,12 +72,12 @@ OzzyWM.alternateAppSwitcher = function()
 	switcher.ui.selectedThumbnailSize = 256
 	switcher.ui.showSelectedTitle = false
 
-	-- Application switcher : next item binding ------
+	-- Application switcher : next item binding
 	hs.hotkey.bind('cmd', '"', function()
 		switcher:next()
 	end)
 
-	-- Application switcher : previous item binding ------
+	-- Application switcher : previous item binding
 	hs.hotkey.bind('cmd-shift', '"', function()
 		switcher:previous()
 	end)
@@ -113,7 +106,7 @@ OzzyWM.numericalWindowDocker = function()
 end
 
 OzzyWM.windowShrinker = function()
-	-- Shrink window anchoring with top and left ------
+	-- Shrink window anchoring with top and left
 	OzzyWM.mod3Binder("9", function()
 		local win, f, screen, max, oneCol = OzzyWM.currentWindowAndScreenElements()
 
@@ -122,7 +115,7 @@ OzzyWM.windowShrinker = function()
 		win:setFrame(f)
 	end)
 
-	-- Shrink window anchoring with center of window ------
+	-- Shrink window anchoring with center of window
 	OzzyWM.mod4Binder("9", function()
 		local win, f, screen, max, oneCol = OzzyWM.currentWindowAndScreenElements()
 
@@ -135,7 +128,7 @@ OzzyWM.windowShrinker = function()
 end
 
 OzzyWM.windowExpander = function()
-	-- Expand window anchoring with top and left ------
+	-- Expand window anchoring with top and left
 	OzzyWM.mod3Binder("0", function()
 		local win, f, screen, max, oneCol = OzzyWM.currentWindowAndScreenElements()
 
@@ -144,7 +137,7 @@ OzzyWM.windowExpander = function()
 		win:setFrame(f)
 	end)
 
-	-- Expand window anchoring with center of window ------
+	-- Expand window anchoring with center of window
 	OzzyWM.mod4Binder("0", function()
 		local win, f, screen, max, oneCol = OzzyWM.currentWindowAndScreenElements()
 
@@ -157,52 +150,51 @@ OzzyWM.windowExpander = function()
 end
 
 OzzyWM.windowSlider = function()
-	-- Slide window to top edge of the screen without resizing it ------
+	-- Slide window to top edge of the screen without resizing it
 	OzzyWM.mod3Binder("Up", function()
 		local win, f, screen, max, oneCol = OzzyWM.currentWindowAndScreenElements()
 
-		f.y = 0
+		f.y = max.y
 		win:setFrame(f)
 	end)
 
-	-- Slide window to right edge of the screen without resizing it ------
+	-- Slide window to right edge of the screen without resizing it
 	OzzyWM.mod3Binder("Right", function()
 		local win, f, screen, max, oneCol = OzzyWM.currentWindowAndScreenElements()
 
-		f.x = max.w - f.w
+		f.x = (max.x + max.w) - f.w
 		win:setFrame(f)
 	end)
 
-	-- Slide window to bottom edge of the screen without resizing it ------
+	-- Slide window to bottom edge of the screen without resizing it
 	OzzyWM.mod3Binder("Down", function()
 		local win, f, screen, max, oneCol = OzzyWM.currentWindowAndScreenElements()
 
 		f.y = max.h - f.h
-		f.y = f.y + 22
 		win:setFrame(f)
 	end)
 
-	-- Slide window to left edge of the screen without resizing it ------
+	-- Slide window to left edge of the screen without resizing it
 	OzzyWM.mod3Binder("Left", function()
 		local win, f, screen, max, oneCol = OzzyWM.currentWindowAndScreenElements()
 
-		f.x = 0
+		f.x = max.x
 		win:setFrame(f)
 	end)
 
-	-- Slide window middle of the screen in x and y axis ------
+	-- Slide window middle of the screen in x and y axis
 	OzzyWM.mod3Binder("Space", function()
 		local win, f, screen, max, oneCol = OzzyWM.currentWindowAndScreenElements()
 
 		f.y = (max.h / 2) - (f.h / 2)
-		f.x = (max.w / 2) - (f.w / 2)
-		f.y = f.y + 11
+		f.x = (max.x + ((max.w / 2) - (f.w / 2)))
+
 		win:setFrame(f)
 	end)
 end
 
 OzzyWM.windowMover = function()
-	-- Move window 10 pixel up ------
+	-- Move window 10 pixel up
 	OzzyWM.mod4Binder("Up", function()
 		local win, f, screen, max, oneCol = OzzyWM.currentWindowAndScreenElements()
 
@@ -210,7 +202,7 @@ OzzyWM.windowMover = function()
 		win:setFrame(f)
 	end)
 
-	-- Move window 10 pixel right ------
+	-- Move window 10 pixel right
 	OzzyWM.mod4Binder("Right", function()
 		local win, f, screen, max, oneCol = OzzyWM.currentWindowAndScreenElements()
 
@@ -218,7 +210,7 @@ OzzyWM.windowMover = function()
 		win:setFrame(f)
 	end)
 
-	-- Move window 10 pixel down ------
+	-- Move window 10 pixel down
 	OzzyWM.mod4Binder("Down", function()
 		local win, f, screen, max, oneCol = OzzyWM.currentWindowAndScreenElements()
 
@@ -226,7 +218,7 @@ OzzyWM.windowMover = function()
 		win:setFrame(f)
 	end)
 
-	-- Move window 10 pixel left ------
+	-- Move window 10 pixel left
 	OzzyWM.mod4Binder("Left", function()
 		local win, f, screen, max, oneCol = OzzyWM.currentWindowAndScreenElements()
 
