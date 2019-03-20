@@ -4,7 +4,7 @@ OzzyWM.__index = OzzyWM
 
 -- Metadata
 OzzyWM.name = "OzzyWM"
-OzzyWM.version = "1.1"
+OzzyWM.version = "1.2"
 OzzyWM.author = "Özgün Çağrı AYDIN"
 OzzyWM.homepage = "https://ozguncagri.com"
 OzzyWM.license = "MIT - https://opensource.org/licenses/MIT"
@@ -13,6 +13,21 @@ OzzyWM.license = "MIT - https://opensource.org/licenses/MIT"
 OzzyWM.windowMoveFactor = 10
 OzzyWM.windowShrinkFactor = 20
 OzzyWM.windowExpandFactor = 20
+
+OzzyWM.deepCopy = function(orig)
+    local orig_type = type(orig)
+    local copy
+    if orig_type == 'table' then
+        copy = {}
+        for orig_key, orig_value in next, orig, nil do
+            copy[OzzyWM.deepCopy(orig_key)] = OzzyWM.deepCopy(orig_value)
+        end
+        setmetatable(copy, OzzyWM.deepCopy(getmetatable(orig)))
+    else -- number, string, boolean, etc
+        copy = orig
+    end
+    return copy
+end
 
 -- 3 modification binder wrapper
 OzzyWM.mod3Binder = function(key, operation)
@@ -154,32 +169,64 @@ OzzyWM.windowSlider = function()
 	OzzyWM.mod3Binder("Up", function()
 		local win, f, screen, max, oneCol = OzzyWM.currentWindowAndScreenElements()
 
+		local oldPosition = OzzyWM.deepCopy(f)
+
 		f.y = max.y
-		win:setFrame(f)
+
+		-- Move window to one screen up if it's touching top edge of current screen
+		if oldPosition.y == f.y then
+			win:moveOneScreenNorth(true, true)
+		else
+			win:setFrame(f)
+		end
 	end)
 
 	-- Slide window to right edge of the screen without resizing it
 	OzzyWM.mod3Binder("Right", function()
 		local win, f, screen, max, oneCol = OzzyWM.currentWindowAndScreenElements()
 
+		local oldPosition = OzzyWM.deepCopy(f)
+
 		f.x = (max.x + max.w) - f.w
-		win:setFrame(f)
+
+		-- Move window to one screen right if it's touching right edge of current screen
+		if oldPosition.x == f.x then
+			win:moveOneScreenEast(true, true)
+		else
+			win:setFrame(f)
+		end
 	end)
 
 	-- Slide window to bottom edge of the screen without resizing it
 	OzzyWM.mod3Binder("Down", function()
 		local win, f, screen, max, oneCol = OzzyWM.currentWindowAndScreenElements()
 
+		local oldPosition = OzzyWM.deepCopy(f)
+
 		f.y = max.h - f.h
-		win:setFrame(f)
+
+		-- Move window to one screen down if it's touching bottom edge of current screen
+		if oldPosition.y == f.y then
+			win:moveOneScreenSouth(true, true)
+		else
+			win:setFrame(f)
+		end
 	end)
 
 	-- Slide window to left edge of the screen without resizing it
 	OzzyWM.mod3Binder("Left", function()
 		local win, f, screen, max, oneCol = OzzyWM.currentWindowAndScreenElements()
 
+		local oldPosition = OzzyWM.deepCopy(f)
+
 		f.x = max.x
-		win:setFrame(f)
+
+		-- Move window to one screen left if it's touching left edge of current screen
+		if oldPosition.x == f.x then
+			win:moveOneScreenWest(true, true)
+		else
+			win:setFrame(f)
+		end
 	end)
 
 	-- Slide window middle of the screen in x and y axis
