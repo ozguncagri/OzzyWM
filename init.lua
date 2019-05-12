@@ -4,7 +4,7 @@ OzzyWM.__index = OzzyWM
 
 -- Metadata
 OzzyWM.name = "OzzyWM"
-OzzyWM.version = "1.2"
+OzzyWM.version = "1.3"
 OzzyWM.author = "Özgün Çağrı AYDIN"
 OzzyWM.homepage = "https://ozguncagri.com"
 OzzyWM.license = "MIT - https://opensource.org/licenses/MIT"
@@ -88,12 +88,12 @@ OzzyWM.alternateAppSwitcher = function()
 	switcher.ui.showSelectedTitle = false
 
 	-- Application switcher : next item binding
-	hs.hotkey.bind('cmd', '"', function()
+	hs.hotkey.bind({"cmd", "alt", "ctrl"}, "Tab", function()
 		switcher:next()
 	end)
 
 	-- Application switcher : previous item binding
-	hs.hotkey.bind('cmd-shift', '"', function()
+	hs.hotkey.bind({"shift", "cmd", "alt", "ctrl"}, "Tab", function()
 		switcher:previous()
 	end)
 end
