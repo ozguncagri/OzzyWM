@@ -31,8 +31,8 @@ then reload your config; you are ready to go.
 
 | Hotkey | Operation  |
 |:--:|:--|
-| ⌘+" | Next Window |
-| ⇧+⌘+" | Previous Window |
+| ⌃+⌥+⌘+Tab | Next Window |
+| ⇧+⌃+⌥+⌘+Tab | Previous Window |
 
 ## Numerical Window Docker
 
