@@ -4,7 +4,7 @@ OzzyWM.__index = OzzyWM
 
 -- Metadata
 OzzyWM.name = "OzzyWM"
-OzzyWM.version = "1.3"
+OzzyWM.version = "1.3.1"
 OzzyWM.author = "Özgün Çağrı AYDIN"
 OzzyWM.homepage = "https://ozguncagri.com"
 OzzyWM.license = "MIT - https://opensource.org/licenses/MIT"
@@ -23,7 +23,7 @@ OzzyWM.deepCopy = function(orig)
             copy[OzzyWM.deepCopy(orig_key)] = OzzyWM.deepCopy(orig_value)
         end
         setmetatable(copy, OzzyWM.deepCopy(getmetatable(orig)))
-    else -- number, string, boolean, etc
+    else
         copy = orig
     end
     return copy
@@ -203,7 +203,7 @@ OzzyWM.windowSlider = function()
 
 		local oldPosition = OzzyWM.deepCopy(f)
 
-		f.y = max.h - f.h
+		f.y = (max.y + max.h) - f.h
 
 		-- Move window to one screen down if it's touching bottom edge of current screen
 		if oldPosition.y == f.y then
@@ -232,11 +232,7 @@ OzzyWM.windowSlider = function()
 	-- Slide window middle of the screen in x and y axis
 	OzzyWM.mod3Binder("Space", function()
 		local win, f, screen, max, oneCol = OzzyWM.currentWindowAndScreenElements()
-
-		f.y = (max.h / 2) - (f.h / 2)
-		f.x = (max.x + ((max.w / 2) - (f.w / 2)))
-
-		win:setFrame(f)
+		win:centerOnScreen()
 	end)
 end
 
