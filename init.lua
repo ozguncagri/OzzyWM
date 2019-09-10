@@ -4,7 +4,7 @@ OzzyWM.__index = OzzyWM
 
 -- Metadata
 OzzyWM.name = "OzzyWM"
-OzzyWM.version = "1.3.1"
+OzzyWM.version = "1.4"
 OzzyWM.author = "Özgün Çağrı AYDIN"
 OzzyWM.homepage = "https://ozguncagri.com"
 OzzyWM.license = "MIT - https://opensource.org/licenses/MIT"
@@ -176,6 +176,7 @@ OzzyWM.windowSlider = function()
 		-- Move window to one screen up if it's touching top edge of current screen
 		if oldPosition.y == f.y then
 			win:moveOneScreenNorth(true, true)
+			win:centerOnScreen()
 		else
 			win:setFrame(f)
 		end
@@ -192,6 +193,7 @@ OzzyWM.windowSlider = function()
 		-- Move window to one screen right if it's touching right edge of current screen
 		if oldPosition.x == f.x then
 			win:moveOneScreenEast(true, true)
+			win:centerOnScreen()
 		else
 			win:setFrame(f)
 		end
@@ -208,6 +210,7 @@ OzzyWM.windowSlider = function()
 		-- Move window to one screen down if it's touching bottom edge of current screen
 		if oldPosition.y == f.y then
 			win:moveOneScreenSouth(true, true)
+			win:centerOnScreen()
 		else
 			win:setFrame(f)
 		end
@@ -224,6 +227,7 @@ OzzyWM.windowSlider = function()
 		-- Move window to one screen left if it's touching left edge of current screen
 		if oldPosition.x == f.x then
 			win:moveOneScreenWest(true, true)
+			win:centerOnScreen()
 		else
 			win:setFrame(f)
 		end
