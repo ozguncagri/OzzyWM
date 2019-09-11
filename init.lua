@@ -4,30 +4,10 @@ OzzyWM.__index = OzzyWM
 
 -- Metadata
 OzzyWM.name = "OzzyWM"
-OzzyWM.version = "1.4"
+OzzyWM.version = "1.5"
 OzzyWM.author = "Özgün Çağrı AYDIN"
 OzzyWM.homepage = "https://ozguncagri.com"
 OzzyWM.license = "MIT - https://opensource.org/licenses/MIT"
-
--- Window move and resize factor definitions
-OzzyWM.windowMoveFactor = 10
-OzzyWM.windowShrinkFactor = 20
-OzzyWM.windowExpandFactor = 20
-
-OzzyWM.deepCopy = function(orig)
-    local orig_type = type(orig)
-    local copy
-    if orig_type == 'table' then
-        copy = {}
-        for orig_key, orig_value in next, orig, nil do
-            copy[OzzyWM.deepCopy(orig_key)] = OzzyWM.deepCopy(orig_value)
-        end
-        setmetatable(copy, OzzyWM.deepCopy(getmetatable(orig)))
-    else
-        copy = orig
-    end
-    return copy
-end
 
 -- 3 modification binder wrapper
 OzzyWM.mod3Binder = function(key, operation)
@@ -44,7 +24,7 @@ OzzyWM.currentWindowAndScreenElements = function()
 	local win = hs.window.focusedWindow()
 	local f = win:frame()
 	local screen = win:screen()
-	local max = screen:fullFrame()
+	local max = screen:frame()
 	local oneCol = max.w / 8
 
 	return win, f, screen, max, oneCol
@@ -56,7 +36,7 @@ OzzyWM.leftColumn = function(columnSize)
 		local win, f, screen, max, oneCol = OzzyWM.currentWindowAndScreenElements()
 
 		f.x = max.x
-		f.y = 0
+		f.y = max.y
 		f.w = oneCol * columnSize
 		f.h = max.h
 		win:setFrame(f)
@@ -69,7 +49,7 @@ OzzyWM.rightColumn = function(columnSize)
 		local win, f, screen, max, oneCol = OzzyWM.currentWindowAndScreenElements()
 
 		f.x = max.x + (max.w - (oneCol * columnSize))
-		f.y = 0
+		f.y = max.y
 		f.w = oneCol * columnSize
 		f.h = max.h
 		win:setFrame(f)
@@ -120,64 +100,19 @@ OzzyWM.numericalWindowDocker = function()
 	OzzyWM.mod4Binder("8", OzzyWM.rightColumn(8))
 end
 
-OzzyWM.windowShrinker = function()
-	-- Shrink window anchoring with top and left
-	OzzyWM.mod3Binder("9", function()
-		local win, f, screen, max, oneCol = OzzyWM.currentWindowAndScreenElements()
-
-		f.w = f.w - OzzyWM.windowShrinkFactor
-		f.h = f.h - OzzyWM.windowShrinkFactor
-		win:setFrame(f)
-	end)
-
-	-- Shrink window anchoring with center of window
-	OzzyWM.mod4Binder("9", function()
-		local win, f, screen, max, oneCol = OzzyWM.currentWindowAndScreenElements()
-
-		f.x = f.x + (OzzyWM.windowShrinkFactor / 2)
-		f.y = f.y + (OzzyWM.windowShrinkFactor / 2)
-		f.w = f.w - OzzyWM.windowShrinkFactor
-		f.h = f.h - OzzyWM.windowShrinkFactor
-		win:setFrame(f)
-	end)
-end
-
-OzzyWM.windowExpander = function()
-	-- Expand window anchoring with top and left
-	OzzyWM.mod3Binder("0", function()
-		local win, f, screen, max, oneCol = OzzyWM.currentWindowAndScreenElements()
-
-		f.w = f.w + OzzyWM.windowExpandFactor
-		f.h = f.h + OzzyWM.windowExpandFactor
-		win:setFrame(f)
-	end)
-
-	-- Expand window anchoring with center of window
-	OzzyWM.mod4Binder("0", function()
-		local win, f, screen, max, oneCol = OzzyWM.currentWindowAndScreenElements()
-
-		f.x = f.x - (OzzyWM.windowExpandFactor / 2)
-		f.y = f.y - (OzzyWM.windowExpandFactor / 2)
-		f.w = f.w + OzzyWM.windowExpandFactor
-		f.h = f.h + OzzyWM.windowExpandFactor
-		win:setFrame(f)
-	end)
-end
-
 OzzyWM.windowSlider = function()
 	-- Slide window to top edge of the screen without resizing it
 	OzzyWM.mod3Binder("Up", function()
 		local win, f, screen, max, oneCol = OzzyWM.currentWindowAndScreenElements()
 
-		local oldPosition = OzzyWM.deepCopy(f)
-
-		f.y = max.y
-
 		-- Move window to one screen up if it's touching top edge of current screen
-		if oldPosition.y == f.y then
-			win:moveOneScreenNorth(true, true)
-			win:centerOnScreen()
+		if f.y == max.y then
+			local slidedWin = win:moveOneScreenNorth(true, true)
+			if slidedWin ~= nil then
+				slidedWin:centerOnScreen()
+			end
 		else
+			f.y = max.y
 			win:setFrame(f)
 		end
 	end)
@@ -186,15 +121,14 @@ OzzyWM.windowSlider = function()
 	OzzyWM.mod3Binder("Right", function()
 		local win, f, screen, max, oneCol = OzzyWM.currentWindowAndScreenElements()
 
-		local oldPosition = OzzyWM.deepCopy(f)
-
-		f.x = (max.x + max.w) - f.w
-
 		-- Move window to one screen right if it's touching right edge of current screen
-		if oldPosition.x == f.x then
-			win:moveOneScreenEast(true, true)
-			win:centerOnScreen()
+		if f.x == (max.x + max.w) - f.w then
+			local slidedWin = win:moveOneScreenEast(true, true)
+			if slidedWin ~= nil then
+				slidedWin:centerOnScreen()
+			end
 		else
+			f.x = (max.x + max.w) - f.w
 			win:setFrame(f)
 		end
 	end)
@@ -203,15 +137,14 @@ OzzyWM.windowSlider = function()
 	OzzyWM.mod3Binder("Down", function()
 		local win, f, screen, max, oneCol = OzzyWM.currentWindowAndScreenElements()
 
-		local oldPosition = OzzyWM.deepCopy(f)
-
-		f.y = (max.y + max.h) - f.h
-
 		-- Move window to one screen down if it's touching bottom edge of current screen
-		if oldPosition.y == f.y then
-			win:moveOneScreenSouth(true, true)
-			win:centerOnScreen()
+		if f.y == (max.y + max.h) - f.h then
+			local slidedWin = win:moveOneScreenSouth(true, true)
+			if slidedWin ~= nil then
+				slidedWin:centerOnScreen()
+			end
 		else
+			f.y = (max.y + max.h) - f.h
 			win:setFrame(f)
 		end
 	end)
@@ -220,15 +153,14 @@ OzzyWM.windowSlider = function()
 	OzzyWM.mod3Binder("Left", function()
 		local win, f, screen, max, oneCol = OzzyWM.currentWindowAndScreenElements()
 
-		local oldPosition = OzzyWM.deepCopy(f)
-
-		f.x = max.x
-
 		-- Move window to one screen left if it's touching left edge of current screen
-		if oldPosition.x == f.x then
-			win:moveOneScreenWest(true, true)
-			win:centerOnScreen()
+		if f.x == max.x then
+			local slidedWin = win:moveOneScreenWest(true, true)
+			if slidedWin ~= nil then
+				slidedWin:centerOnScreen()
+			end
 		else
+			f.x = max.x
 			win:setFrame(f)
 		end
 	end)
@@ -240,37 +172,161 @@ OzzyWM.windowSlider = function()
 	end)
 end
 
-OzzyWM.windowMover = function()
-	-- Move window 10 pixel up
+OzzyWM.windowSnapper = function()
+	local isWindowSnappedToLeftHalf = function()
+		local win, f, screen, max, oneCol = OzzyWM.currentWindowAndScreenElements()
+		return f.x == max.x and f.y == max.y and f.w == oneCol * 4 and f.h == max.h
+	end
+
+	local isWindowSnappedToLeftQuarter = function()
+		local win, f, screen, max, oneCol = OzzyWM.currentWindowAndScreenElements()
+		return f.x == max.x and f.y == max.y and f.w == oneCol * 2 and f.h == max.h
+	end
+
+	local isWindowSnappedToRightHalf = function()
+		local win, f, screen, max, oneCol = OzzyWM.currentWindowAndScreenElements()
+		return f.x == max.x + (max.w - (oneCol * 4)) and f.y == max.y and f.w == oneCol * 4 and f.h == max.h
+	end
+
+	local isWindowSnappedToRightQuarter = function()
+		local win, f, screen, max, oneCol = OzzyWM.currentWindowAndScreenElements()
+		return f.x == max.x + (max.w - (oneCol * 2)) and f.y == max.y and f.w == oneCol * 2 and f.h == max.h
+	end
+
+	local isWindowSnappedToTopHalf = function()
+		local win, f, screen, max, oneCol = OzzyWM.currentWindowAndScreenElements()
+		return f.y == max.y and f.x == max.x and f.w == max.w and f.h == math.floor(max.h / 2)
+	end
+
+	local isWindowSnappedToTopQuarter = function()
+		local win, f, screen, max, oneCol = OzzyWM.currentWindowAndScreenElements()
+		return f.y == max.y and f.x == max.x and f.w == max.w and f.h == math.floor(max.h / 4)
+	end
+
+	local isWindowSnappedToBottomHalf = function()
+		local win, f, screen, max, oneCol = OzzyWM.currentWindowAndScreenElements()
+		return f.y == (max.y + max.h) - f.h and f.x == max.x and f.w == max.w and f.h == math.floor(max.h / 2)
+	end
+
+	local isWindowSnappedToBottomQuarter = function()
+		local win, f, screen, max, oneCol = OzzyWM.currentWindowAndScreenElements()
+		return f.w == max.w and f.h == math.floor(max.h / 4) and f.y == (math.floor(max.h / 4) * 3) + max.y and f.x == max.x
+	end
+
 	OzzyWM.mod4Binder("Up", function()
 		local win, f, screen, max, oneCol = OzzyWM.currentWindowAndScreenElements()
 
-		f.y = f.y - OzzyWM.windowMoveFactor
+		-- Snap window to top-left or right quarter of current screen
+		if isWindowSnappedToLeftHalf() or isWindowSnappedToRightHalf() then
+			f.h = math.floor(max.h / 2)
+			win:setFrame(f)
+			return
+		end
+
+		-- Snap window to top quarter or left-right 1/16 of current screen
+		if isWindowSnappedToTopHalf() or isWindowSnappedToLeftQuarter() or isWindowSnappedToRightQuarter() then
+			f.h = math.floor(max.h / 4)
+			win:setFrame(f)
+			return
+		end
+
+		-- Snap window to top half of current screen
+		f.y = max.y
+		f.x = max.x
+		f.w = max.w
+		f.h = math.floor(max.h / 2)
+
 		win:setFrame(f)
 	end)
 
-	-- Move window 10 pixel right
 	OzzyWM.mod4Binder("Right", function()
 		local win, f, screen, max, oneCol = OzzyWM.currentWindowAndScreenElements()
 
-		f.x = f.x + OzzyWM.windowMoveFactor
+		-- Snap window to top or bottom right quarter of current screen
+		if isWindowSnappedToTopHalf() or isWindowSnappedToBottomHalf() then
+			f.x = max.x + (max.w - (oneCol * 4))
+			f.w = oneCol * 4
+			win:setFrame(f)
+			return
+		end
+
+		-- Snap window to right quarter or top-bottom 1/16 of current screen
+		if isWindowSnappedToRightHalf() or isWindowSnappedToTopQuarter() or isWindowSnappedToBottomQuarter() then
+			f.x = max.x + (max.w - (oneCol * 2))
+			f.w = oneCol * 2
+			win:setFrame(f)
+			return
+		end
+
+		-- Snap window to right half of current screen
+		f.x = max.x + (max.w - (oneCol * 4))
+		f.y = max.y
+		f.w = oneCol * 4
+		f.h = max.h
+
 		win:setFrame(f)
 	end)
 
-	-- Move window 10 pixel down
 	OzzyWM.mod4Binder("Down", function()
 		local win, f, screen, max, oneCol = OzzyWM.currentWindowAndScreenElements()
 
-		f.y = f.y + OzzyWM.windowMoveFactor
+		-- Snap window to bottom-left or right quarter of current screen
+		if isWindowSnappedToLeftHalf() or isWindowSnappedToRightHalf() then
+			f.y = math.floor(max.h / 2) + max.y
+			f.h = math.floor(max.h / 2)
+			win:setFrame(f)
+			return
+		end
+
+		-- Snap window to bottom quarter or left-right 1/16 of current screen
+		if isWindowSnappedToBottomHalf() or isWindowSnappedToLeftQuarter() or isWindowSnappedToRightQuarter() then
+			f.h = math.floor(max.h / 4)
+			f.y = (math.floor(max.h / 4) * 3) + max.y
+			win:setFrame(f)
+			return
+		end
+
+		-- Snap window to bottom half of current screen
+		f.w = max.w
+		f.h = math.floor(max.h / 2)
+		f.y = (max.y + max.h) - f.h
+		f.x = max.x
+
 		win:setFrame(f)
 	end)
 
-	-- Move window 10 pixel left
 	OzzyWM.mod4Binder("Left", function()
 		local win, f, screen, max, oneCol = OzzyWM.currentWindowAndScreenElements()
 
-		f.x = f.x - OzzyWM.windowMoveFactor
+		-- Snap window to top or bottom right quarter of current screen
+		if isWindowSnappedToTopHalf() or isWindowSnappedToBottomHalf() then
+			f.w = oneCol * 4
+			win:setFrame(f)
+			return
+		end
+
+		-- Snap window to left quarter of current screen
+		if isWindowSnappedToLeftHalf() or isWindowSnappedToTopQuarter() or isWindowSnappedToBottomQuarter() then
+			f.w = oneCol * 2
+			win:setFrame(f)
+			return
+		end
+
+		-- Snap window to left half of current screen
+		f.x = max.x
+		f.y = max.y
+		f.w = oneCol * 4
+		f.h = max.h
+
 		win:setFrame(f)
+	end)
+end
+
+OzzyWM.windowZoomer = function()
+	-- Toggles the zoom state of the window (this is effectively equivalent to clicking the green maximize/fullscreen button at the top left of a window)
+	OzzyWM.mod4Binder("Space", function()
+		local win, f, screen, max, oneCol = OzzyWM.currentWindowAndScreenElements()
+		win:toggleZoom()
 	end)
 end
 
@@ -278,10 +334,9 @@ function OzzyWM:init()
 	-- Activate all hotkeys
 	OzzyWM.alternateAppSwitcher()
 	OzzyWM.numericalWindowDocker()
-	OzzyWM.windowShrinker()
-	OzzyWM.windowExpander()
 	OzzyWM.windowSlider()
-	OzzyWM.windowMover()
+	OzzyWM.windowSnapper()
+	OzzyWM.windowZoomer()
 end
 
 return OzzyWM

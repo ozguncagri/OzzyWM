@@ -24,6 +24,8 @@ then reload your config; you are ready to go.
 | → | Right Arrow |
 | ↓ | Down Arrow |
 | ← | Left Arrow |
+| ⇥ | Tab Key |
+| ␣ | Space Kay |
 
 ---
 
@@ -31,59 +33,53 @@ then reload your config; you are ready to go.
 
 | Hotkey | Operation  |
 |:--:|:--|
-| ⌃+⌥+⌘+Tab | Next Window |
-| ⇧+⌃+⌥+⌘+Tab | Previous Window |
+| ⌃ + ⌥ + ⌘ + ⇥ | Next Window |
+| ⇧ + ⌃ + ⌥ + ⌘ + ⇥ | Previous Window |
 
 ## Numerical Window Docker
 
 | Hotkey | Operation  |
 |:--:|:--|
-| ⌃+⌥+⌘+1 | Dock window to left side and resize it to 1/8 |
-| ⌃+⌥+⌘+2 | Dock window to left side and resize it to 2/8 |
-| ⌃+⌥+⌘+3 | Dock window to left side and resize it to 3/8 |
-| ⌃+⌥+⌘+4 | Dock window to left side and resize it to 4/8 |
-| ⌃+⌥+⌘+5 | Dock window to left side and resize it to 5/8 |
-| ⌃+⌥+⌘+6 | Dock window to left side and resize it to 6/8 |
-| ⌃+⌥+⌘+7 | Dock window to left side and resize it to 7/8 |
-| ⌃+⌥+⌘+8 | Window becomes full screen |
-| ⇧+⌃+⌥+⌘+1 | Dock window to right side and resize it to 1/8 |
-| ⇧+⌃+⌥+⌘+2 | Dock window to right side and resize it to 2/8 |
-| ⇧+⌃+⌥+⌘+3 | Dock window to right side and resize it to 3/8 |
-| ⇧+⌃+⌥+⌘+4 | Dock window to right side and resize it to 4/8 |
-| ⇧+⌃+⌥+⌘+5 | Dock window to right side and resize it to 5/8 |
-| ⇧+⌃+⌥+⌘+6 | Dock window to right side and resize it to 6/8 |
-| ⇧+⌃+⌥+⌘+7 | Dock window to right side and resize it to 7/8 |
-| ⇧+⌃+⌥+⌘+8 | Window becomes full screen |
+| ⌃ + ⌥ + ⌘ + 1 | Dock window to left side and resize it to 1/8 |
+| ⌃ + ⌥ + ⌘ + 2 | Dock window to left side and resize it to 2/8 |
+| ⌃ + ⌥ + ⌘ + 3 | Dock window to left side and resize it to 3/8 |
+| ⌃ + ⌥ + ⌘ + 4 | Dock window to left side and resize it to 4/8 |
+| ⌃ + ⌥ + ⌘ + 5 | Dock window to left side and resize it to 5/8 |
+| ⌃ + ⌥ + ⌘ + 6 | Dock window to left side and resize it to 6/8 |
+| ⌃ + ⌥ + ⌘ + 7 | Dock window to left side and resize it to 7/8 |
+| ⌃ + ⌥ + ⌘ + 8 | Window becomes full screen |
+| ⇧ + ⌃ + ⌥ + ⌘ + 1 | Dock window to right side and resize it to 1/8 |
+| ⇧ + ⌃ + ⌥ + ⌘ + 2 | Dock window to right side and resize it to 2/8 |
+| ⇧ + ⌃ + ⌥ + ⌘ + 3 | Dock window to right side and resize it to 3/8 |
+| ⇧ + ⌃ + ⌥ + ⌘ + 4 | Dock window to right side and resize it to 4/8 |
+| ⇧ + ⌃ + ⌥ + ⌘ + 5 | Dock window to right side and resize it to 5/8 |
+| ⇧ + ⌃ + ⌥ + ⌘ + 6 | Dock window to right side and resize it to 6/8 |
+| ⇧ + ⌃ + ⌥ + ⌘ + 7 | Dock window to right side and resize it to 7/8 |
+| ⇧ + ⌃ + ⌥ + ⌘ + 8 | Window becomes full screen |
 
-## Window Shrinker
-
-| Hotkey | Operation  |
-|:--:|:--|
-| ⌃+⌥+⌘+9 | Shrink window anchoring with top and left |
-| ⇧+⌃+⌥+⌘+9 | Shrink window anchoring with center of window |
-
-## Window Expander
+## Window Zoomer
 
 | Hotkey | Operation  |
 |:--:|:--|
-| ⌃+⌥+⌘+0 | Expand window anchoring with top and left |
-| ⇧+⌃+⌥+⌘+0 | Expand window anchoring with center of window |
+| ⇧ + ⌃ + ⌥ + ⌘ + ␣ | Toggles the zoom state of the window |
 
 ## Window Slider
 
 | Hotkey | Operation  |
 |:--:|:--|
-| ⌃+⌥+⌘+↑ | Slide window to top edge of the screen without resizing it |
-| ⌃+⌥+⌘+→ | Slide window to right edge of the screen without resizing it |
-| ⌃+⌥+⌘+↓ | Slide window to bottom edge of the screen without resizing it |
-| ⌃+⌥+⌘+← | Slide window to left edge of the screen without resizing it |
-| ⌃+⌥+⌘+Space | Slide window middle of the screen in x and y axis |
+| ⌃ + ⌥ + ⌘ + ↑ | Slide window to top edge of the screen without resizing it |
+| ⌃ + ⌥ + ⌘ + → | Slide window to right edge of the screen without resizing it |
+| ⌃ + ⌥ + ⌘ + ↓ | Slide window to bottom edge of the screen without resizing it |
+| ⌃ + ⌥ + ⌘ + ← | Slide window to left edge of the screen without resizing it |
+| ⌃ + ⌥ + ⌘ + ␣ | Slide window middle of the screen in x and y axis |
 
-## Window Mover
+## Window Snapper
+
+Pressing hotkeys again shrinks down the window to quarter of the side you press. If you press other arrow hotkeys (except opposite arrow) the window shrinks down to the corners of the screen.
 
 | Hotkey | Operation  |
 |:--:|:--|
-| ⇧+⌃+⌥+⌘+↑ | Move window 10 pixel up |
-| ⇧+⌃+⌥+⌘+→ | Move window 10 pixel right |
-| ⇧+⌃+⌥+⌘+↓ | Move window 10 pixel down |
-| ⇧+⌃+⌥+⌘+← | Move window 10 pixel left |
+| ⇧ + ⌃ + ⌥ + ⌘ + ↑ | Snap window to top half of the screen |
+| ⇧ + ⌃ + ⌥ + ⌘ + → | Snap window to right half side of the screen |
+| ⇧ + ⌃ + ⌥ + ⌘ + ↓ | Snap window to bottom half of the screen |
+| ⇧ + ⌃ + ⌥ + ⌘ + ← | Snap window to left half side of the screen |
