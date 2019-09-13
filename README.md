@@ -38,6 +38,8 @@ then reload your config; you are ready to go.
 
 ## Numerical Window Docker
 
+![Numerical Window Docker Usage](resources/numericalDocker.gif)
+
 | Hotkey | Operation  |
 |:--:|:--|
 | ⌃ + ⌥ + ⌘ + 1 | Dock window to left side and resize it to 1/8 |
@@ -65,6 +67,8 @@ then reload your config; you are ready to go.
 
 ## Window Slider
 
+![Window Slider Usage](resources/windowSlider.gif)
+
 | Hotkey | Operation  |
 |:--:|:--|
 | ⌃ + ⌥ + ⌘ + ↑ | Slide window to top edge of the screen without resizing it |
@@ -76,6 +80,8 @@ then reload your config; you are ready to go.
 ## Window Snapper
 
 Pressing hotkeys again shrinks down the window to quarter of the side you press. If you press other arrow hotkeys (except opposite arrow) the window shrinks down to the corners of the screen.
+
+![Window Snapper Usage](resources/windowSnapper.gif)
 
 | Hotkey | Operation  |
 |:--:|:--|
