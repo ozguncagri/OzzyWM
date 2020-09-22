@@ -101,50 +101,17 @@ OzzyWM.numericalWindowDocker = function()
 end
 
 OzzyWM.windowSlider = function()
-	-- Slide window to top edge of the screen without resizing it
-	OzzyWM.mod3Binder("Up", function()
-		local win, f, screen, max, oneCol = OzzyWM.currentWindowAndScreenElements()
-
-		-- Move window to one screen up if it's touching top edge of current screen
-		if f.y == max.y then
-			local slidedWin = win:moveOneScreenNorth(true, true)
-			if slidedWin ~= nil then
-				slidedWin:centerOnScreen()
-			end
-		else
-			f.y = max.y
-			win:setFrame(f)
-		end
-	end)
-
 	-- Slide window to right edge of the screen without resizing it
 	OzzyWM.mod3Binder("Right", function()
 		local win, f, screen, max, oneCol = OzzyWM.currentWindowAndScreenElements()
 
 		-- Move window to one screen right if it's touching right edge of current screen
 		if f.x == (max.x + max.w) - f.w then
-			local slidedWin = win:moveOneScreenEast(true, true)
-			if slidedWin ~= nil then
-				slidedWin:centerOnScreen()
-			end
+      -- Move to the Next Window.
+      local rightScreen = win:screen():next()
+      win:moveToScreen(rightScreen, true, true)
 		else
 			f.x = (max.x + max.w) - f.w
-			win:setFrame(f)
-		end
-	end)
-
-	-- Slide window to bottom edge of the screen without resizing it
-	OzzyWM.mod3Binder("Down", function()
-		local win, f, screen, max, oneCol = OzzyWM.currentWindowAndScreenElements()
-
-		-- Move window to one screen down if it's touching bottom edge of current screen
-		if f.y == (max.y + max.h) - f.h then
-			local slidedWin = win:moveOneScreenSouth(true, true)
-			if slidedWin ~= nil then
-				slidedWin:centerOnScreen()
-			end
-		else
-			f.y = (max.y + max.h) - f.h
 			win:setFrame(f)
 		end
 	end)
@@ -155,10 +122,9 @@ OzzyWM.windowSlider = function()
 
 		-- Move window to one screen left if it's touching left edge of current screen
 		if f.x == max.x then
-			local slidedWin = win:moveOneScreenWest(true, true)
-			if slidedWin ~= nil then
-				slidedWin:centerOnScreen()
-			end
+      -- Move to the Previous Window.
+      local leftScreen = win:screen():previous()
+      win:moveToScreen(leftScreen, true, true)
 		else
 			f.x = max.x
 			win:setFrame(f)
